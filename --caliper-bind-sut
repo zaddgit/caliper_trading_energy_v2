@@ -1,0 +1,1 @@
+2023.07.13-21:11:05.134[31m error[39m [caliper] [bind] 	SUT is not specified. Available SUTs: fabric | fisco-bcos | ethereum | besu

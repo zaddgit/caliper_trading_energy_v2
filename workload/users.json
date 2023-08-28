@@ -1,0 +1,19 @@
+[
+  {
+    "xMax": ["1010", "200"],
+    "surplusEnergy": ["150", "75"],
+    "prices": ["10", "20"],
+    "identify": "user123",
+    "clearPrice": ["5", "15"],
+    "clearQuantity": ["30", "60"]
+  },
+  {
+    "xMax": ["150", "250"],
+    "surplusEnergy": ["55", "80"],
+    "prices": ["15", "25"],
+    "identify": "user456",
+    "clearPrice": ["6", "16"],
+    "clearQuantity": ["35", "65"]
+  }
+]
+

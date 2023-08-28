@@ -1,0 +1,30 @@
+test:
+  name: energy-trading
+  description: Executing the benchmark for match buyers and sellers
+  workers:
+    type: local
+    number: 2
+  rounds:
+    - label: INITLEDGER multiple users
+      txDuration: 10
+      rateControl:
+        type: fixed-rate
+        opts:
+          transactionLoad: 2
+      workload:
+        module: workload/energyworload.js
+        method: run
+        arguments:
+          contractId: smartcontract
+	users: 10
+monitor:
+  type:
+    - docker
+  docker:
+    containers:
+      - all
+    charting:
+      polar:
+        metrics: [all]
+  interval: 1
+
