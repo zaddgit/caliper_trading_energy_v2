@@ -18,7 +18,7 @@ organizations:
       certificates:
       - name: 'User1'
         clientPrivateKey:
-          path: ../fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/ec380fd8bb977294e6dbc484c856650b28490bc312e252370e6652657a27c2cb_sk	
+          path: ../fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/158965300f98e76114ae212266f09899c0f1573252ed3e1ceac1a4be0191685e_sk
         clientSignedCert:
           path: ../fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/signcerts/cert.pem
     connectionProfile:

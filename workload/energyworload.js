@@ -16,8 +16,8 @@ class InitLedgerWorkload extends WorkloadModuleBase {
 
 
     async submitTransaction() {
-        let numberOfSeller = 3;
-        let numberOfBuyer = 3;
+        let numberOfSeller = 10;
+        let numberOfBuyer = 10;
         let userInfoArr = [];
         let endKey = `user${this.padLeadingZeros(numberOfSeller + numberOfBuyer + 1, 4)}`;
 
@@ -45,7 +45,7 @@ class InitLedgerWorkload extends WorkloadModuleBase {
     }
 
     async generateBuyer(idNumber) {
-        let minQuantity = 0.1, maxQuantity = 5;
+        let minQuantity = 2.1, maxQuantity = 6;
         let minPriceB = 14, maxPriceB = 22;
         let rdQuantity = (Math.random() * (maxQuantity - minQuantity) + minQuantity).toFixed(3);
         let rdPrice = (Math.random() * (maxPriceB - minPriceB) + minPriceB).toFixed(1);
@@ -59,7 +59,7 @@ class InitLedgerWorkload extends WorkloadModuleBase {
     }
 
     async generateSeller(idNumber) {
-        let minQuantity = 0.1, maxQuantity = 5;
+        let minQuantity = 2.1, maxQuantity = 6;
         let minPriceS = 5, maxPriceS = 13;
         let rdQuantity = (Math.random() * (maxQuantity - minQuantity) + minQuantity).toFixed(3);
         let rdPrice = (Math.random() * (maxPriceS - minPriceS) + minPriceS).toFixed(1);
