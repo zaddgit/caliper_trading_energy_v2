@@ -1,40 +1,20 @@
-# Hyperledger Caliper Benchmarks
+#to packe the chaincode 
+peer lifecycle chaincode package smartcontract.tar.gz --path ../../caliper-benchmarks/chaincodes/ --lang golang --label smartcontract_1.0
 
-This repository contains sample benchmarks that may be used by Caliper, a blockchain performance benchmark framework. For more information on Caliper, please see the [Caliper main repository](https://github.com/hyperledger/caliper/)
+peer lifecycle chaincode calculatepackageid smartcontract.tar.gz
+#install chaincode 
+peer lifecycle chaincode install smartcontract.tar.gz
+#approve the chaincode into the Orgs
+peer lifecycle chaincode approveformyorg --orderer localhost:7050 --ordererTLSHostnameOverride orderer.example.com --channelID mychannel --name smartcontract --version 1.0 --init-required --package-id smartcontract_1.0:e2cc8066842393cd364c549525fcd934681e8bf549372cfef05138b5c464bd64 --sequence 1 --tls --cafile /home/moonzad/go/src/github.com/zaddgit/fabric-samples/test-network/organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem  --signature-policy "OR('Org1MSP.peer','Org2MSP.peer')"
+#check if approved
+peer lifecycle chaincode checkcommitreadiness --channelID mychannel --name smartcontract --version 1.0 --init-required --sequence 1 --tls --cafile /home/moonzad/go/src/github.com/zaddgit/fabric-samples/test-network/organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem --signature-policy "OR('Org1MSP.peer','Org2MSP.peer')"
+#if one org approved the other not,cheque the /scripts-ENV execute the one that didn't, example: ./setOrg1Env.sh and approve again
+peer lifecycle chaincode approveformyorg --orderer localhost:7050 --ordererTLSHostnameOverride orderer.example.com --channelID mychannel --name smartcontract --version 1.0 --init-required --package-id smartcontract_1.0:e2cc8066842393cd364c549525fcd934681e8bf549372cfef05138b5c464bd64 --sequence 1 --tls --cafile /home/moonzad/go/src/github.com/zaddgit/fabric-samples/test-network/organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem --signature-policy "OR('Org1MSP.peer','Org2MSP.peer')"
+#commit the chaincode 
+peer lifecycle chaincode commit -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --channelID mychannel --name smartcontract --version 1.0 --init-required --sequence 1 --tls --cafile /home/moonzad/go/src/github.com/zaddgit/fabric-samples/test-network/organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem --peerAddresses localhost:7051 --tlsRootCertFiles /home/moonzad/go/src/github.com/zaddgit/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt --peerAddresses localhost:9051 --tlsRootCertFiles /home/moonzad/go/src/github.com/zaddgit/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt --signature-policy "OR('Org1MSP.peer','Org2MSP.peer')"
+#query if commited
+peer lifecycle chaincode querycommitted --channelID mychannel --name smartcontract
 
-Associated performance reports, based on running these benchmarks, are published to the [repository github pages](https://hyperledger.github.io/caliper-benchmarks/).
+#create the users for users.json
+json_content=$(cat workload/users.json | tr -d '\n' | sed 's/"/\\"/g') 
 
-## Repository Branches
-
-This repository has three branches:
-
-1. **main**. Contains sample benchmarks
-2. **reports**. Contains md files that are built and published to the `gh-pages` branch
-3. **gh-pages**. Contains the build output from the `reports` branch 
-
-## Main Branch Contents
-
-The benchmarks contained within the master branch are split into three directories:
-
-1. **benchmarks**. Comprises the test configuration and callback files. The test configuration files describe the benchmark test parameters and also reference the callback files that are executed by Caliper clients during the benchmark. The Benchmark folder contains the following subfolders:
-    - **api** Tests directed towards the API of a single target blockchain.
-	- **samples** Tests directed towards the native samples provided by target blockchain platforms.
-	- **scenario** Generic scenarios that are valid for all (supported) target blockchain platforms
-2. **networks**. Comprises sample blockchain networks that may be used as target systems under test (SUT) for benchmarking purposes.
-3. **src**. Comprises the source smart contract files that are deployed to the SUT and interacted with via the test callbacks located within the benchmarks folder. Each smart contract is held within its own folder, under the blockchain technology that the smart contract corresponds to.
-
-## Running a Benchmark
-
-To run any of the benchmarks present in this repository, it is required to have installed [Hyperledger Caliper]((https://github.com/hyperledger/caliper/)), which is the intended consumer of all the contained files.
-
-In general the steps are:
-
-1. Install the Caliper CLI - for details please see the [Caliper main repository](https://github.com/hyperledger/caliper/)
-2. Clone this repository
-3. Run a Caliper CLI command that targets one of the contained benchmarks.
-
-For detailed information about using this repo with hyperledger fabric see [Hyperledger Fabric Networks](./networks/fabric/README.md)
-
-## Extending the Documented Reports
-
-The documented reports are built automatically from the `reports` branch of this repository and subsequently hosted on the `gh-pages` branch; pull requests must be target the [`reports` branch](https://github.com/hyperledger/caliper-benchmarks/tree/reports) in order for any modifications to be built.

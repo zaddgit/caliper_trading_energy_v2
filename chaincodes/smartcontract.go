@@ -24,7 +24,7 @@ type EnergyTradingContract struct {
 }
 
 // InitLedger initializes the ledger with some users
-func (c *EnergyTradingContract) InitLedger(ctx contractapi.TransactionContextInterface, usersJSON string, endKey string) error {
+func (c *EnergyTradingContract) InitLedger(ctx contractapi.TransactionContextInterface, usersJSON string) error {
         var users []User
         err := json.Unmarshal([]byte(usersJSON), &users)
         if err != nil {

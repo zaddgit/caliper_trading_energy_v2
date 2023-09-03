@@ -12,11 +12,23 @@ test:
         opts:
           transactionLoad: 2
       workload:
-        module: workload/energyworload.js
+        module: workload/energyworload2.js
         method: run
         arguments:
           contractId: smartcontract
-	users: 10
+        users: 10
+    - label: Stackelberg Game
+      txDuration: 10
+      rateControl:
+        type: fixed-rate
+        opts:
+          transactionLoad: 2
+      workload:
+        module: workload/stackelbergGame.js
+        method: run
+        arguments:
+          contractId: smartcontract
+        users: 10
 monitor:
   type:
     - docker

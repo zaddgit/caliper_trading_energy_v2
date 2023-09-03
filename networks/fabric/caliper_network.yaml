@@ -9,7 +9,7 @@ channels:
   - channelName: mychannel
     # the chaincodeIDs of all the fabric chaincodes in caliper-benchmarks
     contracts:
-    - id: smartcontract_1.0
+    - id: smartcontract
 
 organizations:
   - mspid: Org1MSP
@@ -18,9 +18,21 @@ organizations:
       certificates:
       - name: 'User1'
         clientPrivateKey:
-          path: ../fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/158965300f98e76114ae212266f09899c0f1573252ed3e1ceac1a4be0191685e_sk
+          path: ../fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/1263cb1335f988605fe95b78aa161b42083f331bb973591c68fdbf9ec6f14c4c_sk
         clientSignedCert:
           path: ../fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/signcerts/cert.pem
     connectionProfile:
       path: ../fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/connection-org1.yaml
+      discover: true
+  - mspid: Org2MSP
+    # Identities come from cryptogen created material for test-network
+    identities:
+      certificates:
+      - name: 'User1'
+        clientPrivateKey:
+          path: ../fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/users/User1@org2.example.com/msp/keystore/7b947611483699e6631f0bb26daaff97d9f557cef7123ce7d24e359a5ce5c1d7_sk
+        clientSignedCert:
+          path: ../fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/users/User1@org2.example.com/msp/signcerts/cert.pem
+    connectionProfile:
+      path: ../fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/connection-org2.yaml
       discover: true

@@ -1,14 +1,12 @@
 const { WorkloadModuleBase } = require('@hyperledger/caliper-core');
 const fs = require('fs');
-const usersJSON = fs.readFileSync('workload/users.json', 'utf8');
+
 class InitLedgerWorkload extends WorkloadModuleBase {
     constructor() {
 
         super();
-//	  this.usersJson = require('./users.json');
-	 this.usersJson = JSON.parse(usersJSON);
-
-  }
+	  this.usersJson = require('./users.json');
+    }
 
     async initializeWorkloadModule(workerIndex, totalWorkers, roundIndex, roundArguments, sutAdapter, sutContext) {
         await super.initializeWorkloadModule(workerIndex, totalWorkers, roundIndex, roundArguments, sutAdapter, sutContext);
@@ -18,12 +16,10 @@ class InitLedgerWorkload extends WorkloadModuleBase {
 
 
     async submitTransaction() {
-        let numberOfSeller = 5;
-        let numberOfBuyer = 5;
+        let numberOfSeller = 10;
+        let numberOfBuyer = 10;
         let userInfoArr = [];
-//        let endKey = `user${this.padLeadingZeros(numberOfSeller + numberOfBuyer + 1, 4)}`;
-
-
+        let endKey = `user${this.padLeadingZeros(numberOfSeller + numberOfBuyer + 1, 4)}`;
 
         for (let i = 0; i < numberOfBuyer; i++) {
             let individualUser = await this.generateBuyer(i);
@@ -36,20 +32,21 @@ class InitLedgerWorkload extends WorkloadModuleBase {
             userInfoArr.push(individualUser);
             j += 1;
         }
-	    let asws = this.calculateASWS(userInfoArr);
+	    // Calcul de l'ASWS
+    let asws = this.calculateASWS(userInfoArr);
     console.log("ASWS : ", asws);
+
 	let args = {
         contractId: 'smartcontract',
         contractFunction: 'InitLedger',
         invokerIdentity: 'User1', // the invoker's identity
-        contractArguments: [JSON.stringify(this.usersJson)], // Include the JSON object
+        contractArguments: [JSON.stringify(this.usersJson), endKey], // Include the JSON object
         readOnly: false // If it's a readOnly transaction or not
     };
 
-   	await this.sutAdapter.sendRequests(args);
-	
+    await this.sutAdapter.sendRequests(args);
     }
-	calculateASWS(users) {
+        calculateASWS(users) {
     let totalQuantity = 0;
     let totalPrice = 0;
 
@@ -72,6 +69,7 @@ class InitLedgerWorkload extends WorkloadModuleBase {
         aswsQuantity: aswsQuantity    };}
 
 
+
     async generateBuyer(idNumber) {
         let minQuantity = 2.1, maxQuantity = 6;
         let minPriceB = 14, maxPriceB = 22;
@@ -89,12 +87,9 @@ class InitLedgerWorkload extends WorkloadModuleBase {
     async generateSeller(idNumber) {
         let minQuantity = 2.1, maxQuantity = 6;
         let minPriceS = 5, maxPriceS = 13;
-       // let rdQuantity = (Math.random() * (maxQuantity - minQuantity) + minQuantity).toFixed(3);
-       // let rdPrice = (Math.random() * (maxPriceS - minPriceS) + minPriceS).toFixed(1);
-       let rdQuantity = parseFloat((Math.random() * (maxQuantity - minQuantity) + minQuantity).toFixed(3));
-	let rdPrice = parseFloat((Math.random() * (maxPriceS - minPriceS) + minPriceS).toFixed(1));
-
-	 idNumber = this.padLeadingZeros(idNumber, 4);
+        let rdQuantity = (Math.random() * (maxQuantity - minQuantity) + minQuantity).toFixed(3);
+        let rdPrice = (Math.random() * (maxPriceS - minPriceS) + minPriceS).toFixed(1);
+        idNumber = this.padLeadingZeros(idNumber, 4);
 
         let content = this.createContent(rdQuantity, rdPrice, 'seller', idNumber);
         await this.writeToFile(content, idNumber);

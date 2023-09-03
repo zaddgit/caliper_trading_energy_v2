@@ -1,19 +1,27 @@
 [
   {
-    "xMax": ["1010", "200"],
-    "surplusEnergy": ["150", "75"],
-    "prices": ["10", "20"],
-    "identify": "user123",
-    "clearPrice": ["5", "15"],
-    "clearQuantity": ["30", "60"]
+    "xMax": ["11.10", "20.0"],
+    "surplusEnergy": ["5.0", "10.0"],
+    "prices": ["5.0", "10.0"],
+    "identify": "user1",
+    "clearPrice": ["0.0"],
+    "clearQuantity": ["0.0"]
   },
   {
-    "xMax": ["150", "250"],
-    "surplusEnergy": ["55", "80"],
-    "prices": ["15", "25"],
-    "identify": "user456",
-    "clearPrice": ["6", "16"],
-    "clearQuantity": ["35", "65"]
+    "xMax": ["15.0", "25.0"],
+    "surplusEnergy": ["7.0", "12.0"],
+    "prices": ["6.0", "11.0"],
+    "identify": "user2",
+    "clearPrice": ["0.0"],
+    "clearQuantity": ["0.0"]
+  },
+  {
+    "xMax": ["12.0", "22.0"],
+    "surplusEnergy": ["6.0", "9.0"],
+    "prices": ["7.0", "9.0"],
+    "identify": "user3",
+    "clearPrice": ["0.0"],
+    "clearQuantity": ["0.0"]
   }
 ]
 
