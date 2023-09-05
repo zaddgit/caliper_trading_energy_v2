@@ -1,0 +1,1 @@
+Quantity: 5.573, Price: 6.1, Type: seller, ID: 0020

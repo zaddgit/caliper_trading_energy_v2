@@ -1,0 +1,1 @@
+Quantity: 4.484, Price: 6.3, Type: seller, ID: 0034

@@ -3,26 +3,51 @@ const fs = require('fs');
 
 class InitLedgerWorkload extends WorkloadModuleBase {
     constructor() {
+
         super();
-        this.usersJson = require('./users_game.json');
+          this.usersJson = require('./users.json');
     }
 
     async initializeWorkloadModule(workerIndex, totalWorkers, roundIndex, roundArguments, sutAdapter, sutContext) {
         await super.initializeWorkloadModule(workerIndex, totalWorkers, roundIndex, roundArguments, sutAdapter, sutContext);
         this.sutAdapter = sutAdapter;
+
     }
 
+// Add a function to simulate Stackelberg competition.
+	async simulateStackelberg(userInfoArr) {
+    // Identify the leader (could be the first seller or another criterion)
+   	 let leader = userInfoArr.find(user => user.type === 'seller');
+	 if (!leader) {
+        // Handle the case when no leader is found, e.g., log an error or throw an exception
+        console.error("No leader found.");
+        return;
+    }
+    // Remaining users are followers
+   	 let followers = userInfoArr.filter(user => user.id !== leader.id);
+
+    // Leader decides strategy first (You can use a more complex model here)
+   	 leader.price = leader.price * 0.95; // Lowering the price by 5% for example
+
+    // Followers react to the leader's strategy
+    	for(let follower of followers) {
+        if(follower.type === 'buyer') {
+            follower.price = parseFloat(follower.price) * 1.05; // Raising the price by 5%
+        }
+        else { // seller
+            follower.price = parseFloat(follower.price) * 0.98; // Lowering the price by 2%
+        }
+    }
+
+    // Combine the leader and followers back into the user list
+    return [leader, ...followers];
+}
+
     async submitTransaction() {
-        let numberOfSeller = 10;
-        let numberOfBuyer = 10;
+        let numberOfSeller = 20;
+        let numberOfBuyer = 20;
         let userInfoArr = [];
         let endKey = `user${this.padLeadingZeros(numberOfSeller + numberOfBuyer + 1, 4)}`;
-	// récupère les arguments
-        const Quantity = this.roundArguments['Quantity'];
-        const Price = this.roundArguments['Price'];
-        const Type = this.roundArguments['Type'];
-        const ID = this.roundArguments['ID'];
-
 
         for (let i = 0; i < numberOfBuyer; i++) {
             let individualUser = await this.generateBuyer(i);
@@ -35,77 +60,49 @@ class InitLedgerWorkload extends WorkloadModuleBase {
             userInfoArr.push(individualUser);
             j += 1;
         }
-
-        // Identify the leader seller with the lowest price
-        let leaderSeller = this.usersJson.find(user => user.type === 'seller');
-        for (let seller of this.usersJson) {
-            if (seller.type === 'seller' && parseFloat(seller.price) < parseFloat(leaderSeller.price)) {
-                leaderSeller = seller;
-            }
-        }
-
-        // Calculate the ASWS
-        let asws = this.calculateASWS(this.usersJson.filter(user => user.type === 'buyer'));
-
-        // Apply Leader-Follower strategy
-        for (let user of this.usersJson) {
-            if (user.type === 'seller' && user === leaderSeller) {
-                user.price = leaderSeller.price;
-            } else if (user.type === 'seller') {
-                user.price = asws.aswsPrice;
-            } else if (user.type === 'buyer') {
-                user.price = asws.aswsPrice;
-            }
-        }
-
-        console.log("ASWS : ", asws);
+	// Simulate the Stackelberg competition
+    let stackelbergUsers = await this.simulateStackelberg(userInfoArr);
+ // Calculate ASWS if needed (you can update this based on the Stackelberg result)
+    let asws = this.calculateASWS(stackelbergUsers);
+            // Calcul de l'ASWS
+   // let asws = this.calculateASWS(userInfoArr);
+    console.log("ASWS : ", asws);
 
         let args = {
-            contractId: 'smartcontract',
-            contractFunction: 'InitLedger',
-            invokerIdentity: 'User1',
-            contractArguments: [JSON.stringify(this.usersJson), endKey],
-            readOnly: false
-        };
+        contractId: 'smartcontract',
+        contractFunction: 'InitLedger',
+        invokerIdentity: 'User1', // the invoker's identity
+        contractArguments: [JSON.stringify(this.usersJson), endKey], // Include the JSON object
+        readOnly: false // If it's a readOnly transaction or not
+    };
 
-        await this.sutAdapter.sendRequests(args);
+    await this.sutAdapter.sendRequests(args);
+    }
+        calculateASWS(users) {
+	if (!Array.isArray(users) || users.length === 0) {
+        console.error("users is not iterable or empty");
+        return;
+    }
+    let totalQuantity = 5;
+    let totalPrice = 5;
+
+    for (let user of users) {
+        let quantityAsFloat = parseFloat(user.quantity);
+        let priceAsFloat = parseFloat(user.price);
+
+        totalQuantity += quantityAsFloat;
+        totalPrice += priceAsFloat;
     }
 
-    calculateASWS(users) {
-        let totalQuantity = 0;
-        let totalPrice = 0;
+    let aswsPrice = totalPrice / users.length;
+    let aswsQuantity = totalQuantity / users.length;
 
-        for (let user of users) {
-            let quantityAsFloat = parseFloat(user.quantity);
-            let priceAsFloat = parseFloat(user.price);
+    console.log("ASWS Prix Moyen : ", aswsPrice);
+    console.log("ASWS Quantité Moyenne : ", aswsQuantity);
 
-            if (!isNaN(quantityAsFloat) && !isNaN(priceAsFloat)) {
-                totalQuantity += quantityAsFloat;
-                totalPrice += priceAsFloat;
-            } else {
-                console.log("Invalid quantity or price for user:", user);
-            }
-        }
-
-        if (users.length > 0) {
-            let aswsPrice = totalPrice / users.length;
-            let aswsQuantity = totalQuantity / users.length;
-
-            console.log("ASWS Average Price : ", aswsPrice);
-            console.log("ASWS Average Quantity : ", aswsQuantity);
-
-            return {
-                aswsPrice: aswsPrice,
-                aswsQuantity: aswsQuantity
-            };
-        } else {
-            console.log("No valid users found for calculating ASWS.");
-            return {
-                aswsPrice: 0,
-                aswsQuantity: 0
-            };
-        }
-    }
+    return {
+        aswsPrice: aswsPrice,
+        aswsQuantity: aswsQuantity    };}
 
 
 

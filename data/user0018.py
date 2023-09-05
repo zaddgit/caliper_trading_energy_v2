@@ -1,1 +1,1 @@
-Quantity: 4.805, Price: 12.2, Type: seller, ID: 0018
+Quantity: 2.610, Price: 21.0, Type: buyer, ID: 0018

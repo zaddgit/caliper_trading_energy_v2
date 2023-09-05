@@ -1,3 +1,4 @@
+
 test:
   name: energy-trading
   description: Executing the benchmark for match buyers and sellers
@@ -5,26 +6,26 @@ test:
     type: local
     number: 2
   rounds:
-    - label: INITLEDGER multiple users
+    - label: INITLEDGER and Stackelberg Game multiple users
       txDuration: 10
       rateControl:
         type: fixed-rate
         opts:
-          transactionLoad: 2
+          transactionLoad: 20
       workload:
-        module: workload/energyworload2.js
+        module: workload/stackelbergGame2.js
         method: run
         arguments:
           contractId: smartcontract
         users: 10
     - label: Stackelberg Game
-      txDuration: 10
+      txDuration: 50
       rateControl:
         type: fixed-rate
         opts:
-          transactionLoad: 2
+          transactionLoad: 20
       workload:
-        module: workload/stackelbergGame.js
+        module: workload/energyworload2.js
         method: run
         arguments:
           contractId: smartcontract

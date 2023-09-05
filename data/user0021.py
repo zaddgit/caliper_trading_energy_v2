@@ -1,0 +1,1 @@
+Quantity: 3.340, Price: 7.9, Type: seller, ID: 0021
