@@ -1,6 +1,12 @@
-./network.sh up createChannel -ca  
+##start the network
+	
+	./network.sh up createChannel -ca	
+# from caliper-benchmark directory 
+	nano networks/fabric/caliper_network.yaml
+#Update the keystore for org1 and org2 
 #to packe the chaincode 
-peer lifecycle chaincode package smartcontract.tar.gz --path ../../caliper-benchmarks/chaincodes/ --lang golang --label smartcontract_1.0
+
+	peer lifecycle chaincode package smartcontract.tar.gz --path ../../caliper-benchmarks/chaincodes/ --lang golang --label smartcontract_1.0
 
 peer lifecycle chaincode calculatepackageid smartcontract.tar.gz
 #install chaincode 
