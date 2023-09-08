@@ -38,7 +38,7 @@ Org2MSP: true
 #commit the chaincode 
 
 	peer lifecycle chaincode commit -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --channelID mychannel --name smartcontract --version 1.0 --init-required --sequence 1 --tls --cafile /home/moonzad/go/src/github.com/zaddgit/fabric-samples/test-network/organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem --peerAddresses localhost:7051 --tlsRootCertFiles /home/moonzad/go/src/github.com/zaddgit/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt --peerAddresses localhost:9051 --tlsRootCertFiles /home/moonzad/go/src/github.com/zaddgit/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt --signature-policy "OR('Org1MSP.peer','Org2MSP.peer')"
-# result :2023-09-08 21:12:22.088 +01 0001 INFO [chaincodeCmd] ClientWait -> txid [3cfcb41ff4e8987fd6535014ee95177753283e61e573b06265a5b660b439761a] committed with status (VALID) at localhost:7051
+## result :2023-09-08 21:12:22.088 +01 0001 INFO [chaincodeCmd] ClientWait -> txid [3cfcb41ff4e8987fd6535014ee95177753283e61e573b06265a5b660b439761a] committed with status (VALID) at localhost:7051
 2023-09-08 21:12:22.092 +01 0002 INFO [chaincodeCmd] ClientWait -> txid [3cfcb41ff4e8987fd6535014ee95177753283e61e573b06265a5b660b439761a] committed with status (VALID) at localhost:9051
 
 # install the chaincode 
