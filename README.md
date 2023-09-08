@@ -1,3 +1,4 @@
+./network.sh up createChannel -ca  
 #to packe the chaincode 
 peer lifecycle chaincode package smartcontract.tar.gz --path ../../caliper-benchmarks/chaincodes/ --lang golang --label smartcontract_1.0
 
