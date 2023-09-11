@@ -8,7 +8,7 @@
 	cd ../fabric-samples/test-network
 #to package the chaincode 
 
-	peer lifecycle chaincode package smartcontract.tar.gz --path ../../caliper-benchmarks/chaincodes/ --lang golang --label smartcontract_1.0
+	peer lifecycle chaincode package smartcontract.tar.gz --path ../../caliper_trading_energy_v2/chaincodes/ --lang golang --label smartcontract_1.0
 
 	peer lifecycle chaincode calculatepackageid smartcontract.tar.gz
 #install chaincode 
